@@ -1,0 +1,237 @@
+package processor
+
+import (
+	"testing"
+)
+
+func TestIsBuiltInValidator(t *testing.T) {
+	tests := []struct {
+		name      string
+		validator string
+		want      bool
+	}{
+		{name: "required", validator: "required", want: true},
+		{name: "required_if", validator: "required_if", want: true},
+		{name: "required_unless", validator: "required_unless", want: true},
+		{name: "required_with", validator: "required_with", want: true},
+		{name: "required_with_all", validator: "required_with_all", want: true},
+		{name: "required_without", validator: "required_without", want: true},
+		{name: "required_without_all", validator: "required_without_all", want: true},
+		{name: "omitempty", validator: "omitempty", want: true},
+		{name: "omitnil", validator: "omitnil", want: true},
+		{name: "excluded_if", validator: "excluded_if", want: true},
+		{name: "excluded_unless", validator: "excluded_unless", want: true},
+		{name: "excluded_with", validator: "excluded_with", want: true},
+		{name: "excluded_with_all", validator: "excluded_with_all", want: true},
+		{name: "excluded_without", validator: "excluded_without", want: true},
+		{name: "excluded_without_all", validator: "excluded_without_all", want: true},
+		{name: "ascii", validator: "ascii", want: true},
+		{name: "printascii", validator: "printascii", want: true},
+		{name: "alpha", validator: "alpha", want: true},
+		{name: "alphanum", validator: "alphanum", want: true},
+		{name: "alphanumunicode", validator: "alphanumunicode", want: true},
+		{name: "alphaunicode", validator: "alphaunicode", want: true},
+		{name: "numeric", validator: "numeric", want: true},
+		{name: "number", validator: "number", want: true},
+		{name: "hexadecimal", validator: "hexadecimal", want: true},
+		{name: "hexcolor", validator: "hexcolor", want: true},
+		{name: "rgb", validator: "rgb", want: true},
+		{name: "rgba", validator: "rgba", want: true},
+		{name: "hsl", validator: "hsl", want: true},
+		{name: "hsla", validator: "hsla", want: true},
+		{name: "email", validator: "email", want: true},
+		{name: "url", validator: "url", want: true},
+		{name: "uri", validator: "uri", want: true},
+		{name: "urn_rfc2141", validator: "urn_rfc2141", want: true},
+		{name: "file", validator: "file", want: true},
+		{name: "filepath", validator: "filepath", want: true},
+		{name: "base64", validator: "base64", want: true},
+		{name: "base64url", validator: "base64url", want: true},
+		{name: "base64rawurl", validator: "base64rawurl", want: true},
+		{name: "jwt", validator: "jwt", want: true},
+		{name: "lowercase", validator: "lowercase", want: true},
+		{name: "uppercase", validator: "uppercase", want: true},
+		{name: "hostname", validator: "hostname", want: true},
+		{name: "hostname_rfc1123", validator: "hostname_rfc1123", want: true},
+		{name: "hostname_port", validator: "hostname_port", want: true},
+		{name: "fqdn", validator: "fqdn", want: true},
+		{name: "html", validator: "html", want: true},
+		{name: "html_encoded", validator: "html_encoded", want: true},
+		{name: "url_encoded", validator: "url_encoded", want: true},
+		{name: "dir", validator: "dir", want: true},
+		{name: "dirpath", validator: "dirpath", want: true},
+		{name: "datauri", validator: "datauri", want: true},
+		{name: "cron", validator: "cron", want: true},
+		{name: "uuid", validator: "uuid", want: true},
+		{name: "uuid3", validator: "uuid3", want: true},
+		{name: "uuid4", validator: "uuid4", want: true},
+		{name: "uuid5", validator: "uuid5", want: true},
+		{name: "uuid_rfc4122", validator: "uuid_rfc4122", want: true},
+		{name: "uuid3_rfc4122", validator: "uuid3_rfc4122", want: true},
+		{name: "uuid4_rfc4122", validator: "uuid4_rfc4122", want: true},
+		{name: "uuid5_rfc4122", validator: "uuid5_rfc4122", want: true},
+		{name: "ulid", validator: "ulid", want: true},
+		{name: "md5", validator: "md5", want: true},
+		{name: "sha256", validator: "sha256", want: true},
+		{name: "sha384", validator: "sha384", want: true},
+		{name: "sha512", validator: "sha512", want: true},
+		{name: "isbn", validator: "isbn", want: true},
+		{name: "isbn10", validator: "isbn10", want: true},
+		{name: "isbn13", validator: "isbn13", want: true},
+		{name: "json", validator: "json", want: true},
+		{name: "contains", validator: "contains", want: true},
+		{name: "containsany", validator: "containsany", want: true},
+		{name: "containsrune", validator: "containsrune", want: true},
+		{name: "excludes", validator: "excludes", want: true},
+		{name: "excludesall", validator: "excludesall", want: true},
+		{name: "excludesrune", validator: "excludesrune", want: true},
+		{name: "startswith", validator: "startswith", want: true},
+		{name: "endswith", validator: "endswith", want: true},
+		{name: "ip", validator: "ip", want: true},
+		{name: "ipv4", validator: "ipv4", want: true},
+		{name: "ipv6", validator: "ipv6", want: true},
+		{name: "cidr", validator: "cidr", want: true},
+		{name: "cidrv4", validator: "cidrv4", want: true},
+		{name: "cidrv6", validator: "cidrv6", want: true},
+		{name: "tcp_addr", validator: "tcp_addr", want: true},
+		{name: "tcp4_addr", validator: "tcp4_addr", want: true},
+		{name: "tcp6_addr", validator: "tcp6_addr", want: true},
+		{name: "udp_addr", validator: "udp_addr", want: true},
+		{name: "udp4_addr", validator: "udp4_addr", want: true},
+		{name: "udp6_addr", validator: "udp6_addr", want: true},
+		{name: "ip_addr", validator: "ip_addr", want: true},
+		{name: "ip4_addr", validator: "ip4_addr", want: true},
+		{name: "ip6_addr", validator: "ip6_addr", want: true},
+		{name: "unix_addr", validator: "unix_addr", want: true},
+		{name: "mac", validator: "mac", want: true},
+		{name: "latitude", validator: "latitude", want: true},
+		{name: "longitude", validator: "longitude", want: true},
+		{name: "latitude_longitude", validator: "latitude_longitude", want: true},
+		{name: "eq", validator: "eq", want: true},
+		{name: "ne", validator: "ne", want: true},
+		{name: "gt", validator: "gt", want: true},
+		{name: "gte", validator: "gte", want: true},
+		{name: "lt", validator: "lt", want: true},
+		{name: "lte", validator: "lte", want: true},
+		{name: "min", validator: "min", want: true},
+		{name: "max", validator: "max", want: true},
+		{name: "len", validator: "len", want: true},
+		{name: "oneof", validator: "oneof", want: true},
+		{name: "unique", validator: "unique", want: true},
+		{name: "eqfield", validator: "eqfield", want: true},
+		{name: "eqcsfield", validator: "eqcsfield", want: true},
+		{name: "nefield", validator: "nefield", want: true},
+		{name: "necsfield", validator: "necsfield", want: true},
+		{name: "gtfield", validator: "gtfield", want: true},
+		{name: "gtcsfield", validator: "gtcsfield", want: true},
+		{name: "gtefield", validator: "gtefield", want: true},
+		{name: "gtecsfield", validator: "gtecsfield", want: true},
+		{name: "ltfield", validator: "ltfield", want: true},
+		{name: "ltcsfield", validator: "ltcsfield", want: true},
+		{name: "ltefield", validator: "ltefield", want: true},
+		{name: "ltecsfield", validator: "ltecsfield", want: true},
+		{name: "fieldcontains", validator: "fieldcontains", want: true},
+		{name: "fieldexcludes", validator: "fieldexcludes", want: true},
+		{name: "datetime", validator: "datetime", want: true},
+		{name: "datetime=2006-01-02", validator: "datetime=2006-01-02", want: true},
+		{name: "datetime=2006-01-02 15:04:05", validator: "datetime=2006-01-02 15:04:05", want: true},
+		{name: "boolean", validator: "boolean", want: true},
+		{name: "image", validator: "image", want: true},
+		{name: "iscolor", validator: "iscolor", want: true},
+		{name: "isdefault", validator: "isdefault", want: true},
+		{name: "credit_card", validator: "credit_card", want: true},
+		{name: "luhn_checksum", validator: "luhn_checksum", want: true},
+		{name: "bic", validator: "bic", want: true},
+		{name: "semver", validator: "semver", want: true},
+		{name: "dns_rfc1035_label", validator: "dns_rfc1035_label", want: true},
+		{name: "timezone", validator: "timezone", want: true},
+		{name: "iso3166_1_alpha2", validator: "iso3166_1_alpha2", want: true},
+		{name: "iso3166_1_alpha3", validator: "iso3166_1_alpha3", want: true},
+		{name: "iso3166_1_alpha_numeric", validator: "iso3166_1_alpha_numeric", want: true},
+		{name: "bcp47_language_tag", validator: "bcp47_language_tag", want: true},
+		{name: "postcode_iso3166_alpha2", validator: "postcode_iso3166_alpha2", want: true},
+		{name: "postcode_iso3166_alpha2_field", validator: "postcode_iso3166_alpha2_field", want: true},
+		{name: "e164", validator: "e164", want: true},
+		{name: "country_code", validator: "country_code", want: true},
+		{name: "min=10", validator: "min=10", want: true},
+		{name: "max=100", validator: "max=100", want: true},
+		{name: "len=8", validator: "len=8", want: true},
+		{name: "eq=5", validator: "eq=5", want: true},
+		{name: "gt=0", validator: "gt=0", want: true},
+		{name: "gte=18", validator: "gte=18", want: true},
+		{name: "lt=100", validator: "lt=100", want: true},
+		{name: "lte=60", validator: "lte=60", want: true},
+		{name: "oneof=red green blue", validator: "oneof=red green blue", want: true},
+		{name: "contains=test", validator: "contains=test", want: true},
+		{name: "startswith=prefix", validator: "startswith=prefix", want: true},
+		{name: "endswith=suffix", validator: "endswith=suffix", want: true},
+		{name: "mobile（项目自定义）", validator: "mobile", want: true},
+		{name: "idcard（项目自定义）", validator: "idcard", want: true},
+		{name: "custom_validator（应为false）", validator: "custom_validator", want: false},
+		{name: "my_custom_rule（应为false）", validator: "my_custom_rule", want: false},
+		{name: "age_range（应为false）", validator: "age_range", want: false},
+		{name: "age_range=18-65（应为false）", validator: "age_range=18-65", want: false},
+		{name: "custom_datetime（应为false）", validator: "custom_datetime", want: false},
+		{name: "my_validator（应为false）", validator: "my_validator", want: false},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := isBuiltInValidator(tt.validator); got != tt.want {
+				t.Errorf("isBuiltInValidator(%q) = %v, want %v", tt.validator, got, tt.want)
+			}
+		})
+	}
+}
+
+func TestExtractValidateTag(t *testing.T) {
+	tests := []struct {
+		name string
+		tag  string
+		want string
+	}{
+		{
+			name: "提取简单的 validate 标签",
+			tag:  "`json:\"name\" validate:\"required\"`",
+			want: "required",
+		},
+		{
+			name: "提取复合的 validate 标签",
+			tag:  "`json:\"email\" validate:\"required,email\"`",
+			want: "required,email",
+		},
+		{
+			name: "提取带参数的 validate 标签",
+			tag:  "`json:\"age\" validate:\"required,min=18,max=100\"`",
+			want: "required,min=18,max=100",
+		},
+		{
+			name: "提取 datetime 验证标签",
+			tag:  "`json:\"birth_date\" validate:\"datetime=2006-01-02\"`",
+			want: "datetime=2006-01-02",
+		},
+		{
+			name: "提取复杂的 datetime 验证标签",
+			tag:  "`json:\"created_at\" validate:\"required,datetime=2006-01-02 15:04:05\"`",
+			want: "required,datetime=2006-01-02 15:04:05",
+		},
+		{
+			name: "没有 validate 标签",
+			tag:  "`json:\"name\"`",
+			want: "",
+		},
+		{
+			name: "空标签",
+			tag:  "",
+			want: "",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := extractValidateTag(tt.tag); got != tt.want {
+				t.Errorf("extractValidateTag(%q) = %q, want %q", tt.tag, got, tt.want)
+			}
+		})
+	}
+}
