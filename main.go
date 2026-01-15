@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/linabellbiu/goctl-validate/internal/processor"
-	"github.com/linabellbiu/goctl-validate/internal/validator"
+	"github.com/jackie1in/goctl-validate/internal/processor"
+	"github.com/jackie1in/goctl-validate/internal/validator"
 
 	"github.com/spf13/cobra"
 	"github.com/zeromicro/go-zero/tools/goctl/plugin"
