@@ -908,6 +908,9 @@ func isBuiltInValidator(validator string) bool {
 		"mobile": true,
 		"idcard": true,
 
+		// dive
+		"dive": true,
+
 		// 必填/条件验证器
 		"required":             true,
 		"required_if":          true,
